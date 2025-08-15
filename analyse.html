@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Analyse SnapView</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+  :root {
+    --gold: #ffe066;
+    --gold-light: #fffbe6;
+    --gold-shadow: #ffe06655;
+    --gold-bg: #ffe06618;
+    --gold-border: #ffe06622;
+    --gold-gradient: linear-gradient(90deg, #ffe066 0%, #fffbe6 100%);
+    --offwhite: #f5f5f2;
+    --offwhite-shadow: #f5f5f2cc;
+    --offwhite-bg: #f5f5f222;
+    --offwhite-border: #f5f5f288;
+    --bg-dark: #111112;
+    --card-bg: #18191c;
+    --card-border: #f5f5f288;
+    --text-main: #ffe066;
+    --text-secondary: #fffbe6;
+    --text-muted: #b7b7a4;
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 40px 20px;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* --- PARTICLES --- */
+  .particle {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0.13;
+    z-index: 0;
+    animation: float 12s cubic-bezier(.77,0,.18,1) infinite alternate;
+    background: radial-gradient(circle, var(--gold) 0%, var(--gold-light) 60%, var(--gold) 100%, transparent 100%);
+    box-shadow: 0 0 12px 2px var(--gold-shadow);
+    will-change: transform;
+  }
+  .particle.p1 { width: 60px; height: 60px; left: 10vw; top: 10vh; animation-delay: 0s; }
+  .particle.p2 { width: 40px; height: 40px; left: 80vw; top: 20vh; animation-delay: 2s; }
+  .particle.p3 { width: 30px; height: 30px; left: 50vw; top: 80vh; animation-delay: 4s; }
+  .particle.p4 { width: 80px; height: 80px; left: 70vw; top: 70vh; animation-delay: 1s; }
+  .particle.p5 { width: 25px; height: 25px; left: 20vw; top: 60vh; animation-delay: 3s; }
+  @keyframes float {
+    0% { transform: translateY(0) scale(1) rotate(0deg);}
+    25% { transform: translateY(-30px) scale(1.08) rotate(8deg);}
+    50% { transform: translateY(-60px) scale(1.12) rotate(-6deg);}
+    75% { transform: translateY(-30px) scale(1.08) rotate(8deg);}
+    100% { transform: translateY(0) scale(1) rotate(0deg);}
+  }
+
+  /* --- HEADER --- */
+  header {
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    user-select: none;
+    z-index: 2;
+    animation: fadeInDown 1.2s cubic-bezier(.77,0,.18,1) both;
+  }
+  @keyframes fadeInDown {
+    0% { opacity: 0; transform: translateY(-60px);}
+    100% { opacity: 1; transform: translateY(0);}
+  }
+
+  h1 {
+    color: var(--gold);
+    font-size: 32px;
+    margin: 0;
+    letter-spacing: 2px;
+    font-weight: 700;
+    text-shadow: 0 0 10px var(--gold-shadow);
+    font-family: 'Poppins', sans-serif;
+  }
+
+  #execution-text {
+    font-size: 18px;
+    margin-top: 10px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-shadow: 0 0 2px #b7b7a488;
+    font-family: 'Poppins', sans-serif;
+    animation: fadeIn 1.5s cubic-bezier(.77,0,.18,1) both;
+  }
+  @keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(40px);}
+    100% { opacity: 1; transform: translateY(0);}
+  }
+
+  /* --- PROGRESS --- */
+  #progress-bar-wrapper {
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  #progress-bar-container {
+    position: relative;
+    flex: 1 1 auto;
+    height: 14px;
+    background: #232323;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 8px var(--offwhite-bg), 0 0 2px #b7b7a433;
+    border: 1.5px solid var(--offwhite-border);
+    animation: fadeIn 1.5s 0.3s cubic-bezier(.77,0,.18,1) both;
+    transition: border-color 0.3s;
+  }
+  #progress-bar-container.verifying {
+    box-shadow: 0 0 16px 4px var(--offwhite), 0 0 0 2px var(--offwhite-shadow);
+    animation: verifyBarPulse 1.2s cubic-bezier(.77,0,.18,1) infinite alternate;
+    border-color: var(--offwhite);
+  }
+  @keyframes verifyBarPulse {
+    0% { box-shadow: 0 0 16px 4px var(--offwhite), 0 0 0 2px var(--offwhite-shadow);}
+    100% { box-shadow: 0 0 32px 8px var(--offwhite), 0 0 0 4px var(--offwhite);}
+  }
+  #progress {
+    height: 100%;
+    width: 0%;
+    background: var(--gold-gradient);
+    border-radius: 12px 0 0 12px;
+    transition: width 0.7s cubic-bezier(.77,0,.18,1);
+    box-shadow: 0 0 8px var(--gold-shadow);
+    animation: progressGlow 3s cubic-bezier(.77,0,.18,1) infinite alternate;
+    will-change: width;
+    position: relative;
+    z-index: 1;
+  }
+  @keyframes progressGlow {
+    0% { box-shadow: 0 0 8px var(--gold-shadow);}
+    100% { box-shadow: 0 0 18px var(--gold);}
+  }
+  #progress-percent {
+    min-width: 48px;
+    text-align: right;
+    font-weight: 700;
+    font-size: 16px;
+    user-select: none;
+    font-family: 'Poppins', sans-serif;
+    color: var(--gold);
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 4px var(--gold-shadow);
+    animation: fadeIn 1.5s 0.2s cubic-bezier(.77,0,.18,1) both;
+    margin: 0;
+    padding-left: 8px;
+  }
+
+  /* --- CARDS --- */
+  .cards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    max-width: 600px;
+    z-index: 2;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border-radius: 18px;
+    padding: 22px 32px 18px 32px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 12px var(--gold-bg), 0 0 4px #b7b7a422;
+    border: 1.5px solid var(--offwhite-border);
+    position: relative;
+    overflow: hidden;
+    will-change: opacity, transform;
+    opacity: 0;
+    transform: translateY(40px) scale(0.97);
+    transition: box-shadow 0.5s cubic-bezier(.77,0,.18,1), opacity 0.7s cubic-bezier(.77,0,.18,1), transform 0.7s cubic-bezier(.77,0,.18,1), background 0.5s cubic-bezier(.77,0,.18,1), border-color 0.5s;
+  }
+  .card.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    animation: popIn 1.1s cubic-bezier(.77,0,.18,1) both;
+    border-color: var(--offwhite);
+    box-shadow: 0 0 16px 4px var(--offwhite-bg), 0 0 0 2px var(--offwhite-shadow);
+  }
+  .card.finished {
+    border-color: var(--offwhite);
+    box-shadow: 0 0 16px 4px var(--offwhite-bg), 0 0 0 2px var(--offwhite-shadow);
+    background: linear-gradient(120deg, var(--offwhite-bg) 0%, var(--card-bg) 100%);
+    transition: border-color 0.5s, box-shadow 0.5s, background 0.5s;
+  }
+  @keyframes popIn {
+    0% { opacity: 0; transform: translateY(60px) scale(0.95);}
+    60% { opacity: 1; transform: translateY(-8px) scale(1.03);}
+    100% { opacity: 1; transform: translateY(0) scale(1);}
+  }
+  .card.loading {
+    animation: glowPulse 2.5s cubic-bezier(.77,0,.18,1) infinite alternate;
+  }
+  .card:hover {
+    box-shadow: 0 0 16px var(--gold), 0 0 18px #b7b7a4;
+    background: linear-gradient(120deg, var(--gold-bg) 0%, #18191c 100%);
+    transform: scale(1.04) rotate(-1deg);
+    transition: box-shadow 0.3s, background 0.3s, transform 0.3s;
+  }
+
+  /* --- Verification animation for cards --- */
+  .card.verifying {
+    border-color: var(--offwhite);
+    box-shadow: 0 0 16px 4px var(--offwhite), 0 0 0 2px var(--offwhite-shadow);
+    animation: popIn 1.1s cubic-bezier(.77,0,.18,1) both;
+    background: linear-gradient(120deg, var(--offwhite-bg) 0%, var(--card-bg) 100%);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 6px;
+  }
+  .card-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 4px var(--gold-shadow));
+    animation: iconAppear 1.2s cubic-bezier(.77,0,.18,1);
+  }
+  @keyframes iconAppear {
+    0% { opacity: 0; transform: scale(0.7);}
+    100% { opacity: 1; transform: scale(1);}
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 1px;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    text-shadow: 0 0 4px var(--gold-shadow);
+  }
+  .card-desc {
+    font-size: 15px;
+    color: var(--gold-light);
+    margin-left: 50px;
+    margin-top: 2px;
+    font-family: 'Poppins', sans-serif;
+    opacity: 0.85;
+    letter-spacing: 0.2px;
+    text-shadow: 0 0 2px var(--gold-shadow);
+  }
+
+  /* --- DECRYPT ANIMATION --- */
+  .decrypt-bar {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto 24px auto;
+    background: #18191c;
+    border-radius: 10px;
+    box-shadow: 0 0 8px var(--gold-border), 0 0 2px #b7b7a433;
+    overflow: hidden;
+    position: relative;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    z-index: 2;
+    border: 1.5px solid var(--gold-border);
+    font-family: 'Poppins', monospace, sans-serif;
+  }
+  .decrypt-bar-inner {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0; top: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .decrypt-bar-glow {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 0%;
+    background: var(--gold-gradient);
+    opacity: 0.10;
+    filter: blur(8px);
+    transition: width 0.5s cubic-bezier(.77,0,.18,1);
+    z-index: 2;
+    border-radius: 10px;
+  }
+  .decrypt-bar-text {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    padding: 0 18px;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    text-shadow: 0 0 4px var(--gold-shadow), 0 0 1px var(--gold-light);
+    font-family: 'Poppins', monospace, sans-serif;
+    white-space: nowrap;
+    overflow: hidden;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    height: 38px;
+  }
+  .decrypt-bar-cursor {
+    display: inline-block;
+    width: 12px;
+    height: 22px;
+    background: var(--gold);
+    margin-left: 4px;
+    border-radius: 2px;
+    opacity: 0.5;
+    animation: blink-cursor 0.8s steps(1) infinite;
+    vertical-align: middle;
+  }
+  @keyframes blink-cursor {
+    0%, 60% { opacity: 0.5; }
+    61%, 100% { opacity: 0; }
+  }
+
+  @keyframes glowPulse {
+    0%, 100% {
+      box-shadow: 0 0 8px var(--gold), inset 0 0 10px #b7b7a4;
+    }
+    50% {
+      box-shadow: 0 0 18px #b7b7a4, inset 0 0 20px var(--gold);
+    }
+  }
+
+  @media (max-width: 700px) {
+    header, #progress-bar-wrapper, .cards-list, .decrypt-bar {
+      max-width: 98vw;
+    }
+    .card { padding: 12px 8px; }
+    h1 { font-size: 22px; }
+    #execution-text { font-size: 15px; }
+    #progress-percent { font-size: 13px; }
+    .decrypt-bar-text { font-size: 14px; }
+    .card-header { gap: 10px; }
+    .card-title { font-size: 16px; }
+    .card-desc { font-size: 12px; margin-left: 38px; }
+    .card-icon { width: 22px; height: 22px; }
+  }
+</style>
+</head>
+<body>
+  <!-- Animated gold particles -->
+  <div class="particle p1"></div>
+  <div class="particle p2"></div>
+  <div class="particle p3"></div>
+  <div class="particle p4"></div>
+  <div class="particle p5"></div>
+
+  <!-- Decrypt animation bar -->
+  <div class="decrypt-bar">
+    <div class="decrypt-bar-inner">
+      <div class="decrypt-bar-glow" id="decrypt-bar-glow"></div>
+    </div>
+    <div class="decrypt-bar-text" id="decrypt-bar-text">
+      <span id="decrypt-bar-content"></span><span class="decrypt-bar-cursor"></span>
+    </div>
+  </div>
+
+  <header>
+    <h1>ANALYSE EN COURS</h1>
+    <div id="execution-text">Décryptage et analyse des données confidentielles...</div>
+  </header>
+
+  <div id="progress-bar-wrapper">
+    <div id="progress-bar-container">
+      <div id="progress"></div>
+    </div>
+    <div id="progress-percent">0%</div>
+  </div>
+
+  <div class="cards-list" id="cards-list">
+    <div class="card" id="card-connexion">
+      <div class="card-header">
+        <span class="card-icon">
+          <!-- Wifi/connexion icon -->
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+            <path d="M12 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm4.24-3.76a6 6 0 0 0-8.48 0" stroke="#ffe066" stroke-width="2" stroke-linecap="round"/>
+            <path d="M18.36 15.64a10 10 0 0 0-12.72 0" stroke="#ffe066" stroke-width="2" stroke-linecap="round"/>
+            <path d="M21.54 12.46a14 14 0 0 0-19.08 0" stroke="#ffe066" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="card-title">Connexion aux serveurs Snapchat</span>
+      </div>
+      <div class="card-desc">Connexion sécurisée établie</div>
+    </div>
+    <div class="card" id="card-protection">
+      <div class="card-header">
+        <span class="card-icon">
+          <!-- Shield icon -->
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+            <path d="M12 3l8 4v5c0 5.25-3.5 10-8 12-4.5-2-8-6.75-8-12V7l8-4z" stroke="#ffe066" stroke-width="2" fill="none"/>
+            <path d="M12 3v18" stroke="#ffe066" stroke-width="2"/>
+          </svg>
+        </span>
+        <span class="card-title">Contournement des protections</span>
+      </div>
+      <div class="card-desc">Protocoles de sécurité neutralisés</div>
+    </div>
+    <div class="card" id="card-recherche">
+      <div class="card-header">
+        <span class="card-icon">
+          <!-- Search icon -->
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+            <circle cx="11" cy="11" r="7" stroke="#ffe066" stroke-width="2"/>
+            <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="#ffe066" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="card-title">Recherche du profil utilisateur</span>
+      </div>
+      <div class="card-desc">ID localisé dans l’index public</div>
+    </div>
+    <div class="card" id="card-extraction">
+      <div class="card-header">
+        <span class="card-icon">
+          <!-- Download icon -->
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+            <path d="M12 3v12" stroke="#ffe066" stroke-width="2" stroke-linecap="round"/>
+            <path d="M8 15l4 4 4-4" stroke="#ffe066" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="4" y="21" width="16" height="2" rx="1" fill="#ffe066" fill-opacity="0.2"/>
+          </svg>
+        </span>
+        <span class="card-title">Extraction des données privées</span>
+      </div>
+      <div class="card-desc">Téléchargement des paquets JSON</div>
+    </div>
+    <div class="card" id="card-decrypt">
+      <div class="card-header">
+        <span class="card-icon">
+          <!-- Lock/Decrypt icon -->
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+            <rect x="5" y="11" width="14" height="8" rx="2" stroke="#ffe066" stroke-width="2"/>
+            <path d="M12 15v2" stroke="#ffe066" stroke-width="2" stroke-linecap="round"/>
+            <path d="M8 11V7a4 4 0 1 1 8 0v4" stroke="#ffe066" stroke-width="2"/>
+          </svg>
+        </span>
+        <span class="card-title">Décryptage des informations</span>
+      </div>
+      <div class="card-desc">Données décodées avec succès</div>
+    </div>
+  </div>
+
+<script>
+  // Animated gold particles
+  for(let i=1;i<=5;i++){
+    if(!document.querySelector('.particle.p'+i)){
+      let d=document.createElement('div');
+      d.className='particle p'+i;
+      document.body.appendChild(d);
+    }
+  }
+
+  // --- DECRYPT ANIMATION LOGIC ---
+  const decryptTexts = [
+    "Connexion sécurisée au serveur...",
+    "Clé AES 256 bits détectée.",
+    "Déchiffrement des métadonnées...",
+    "Analyse des paquets réseau...",
+    "Extraction des identifiants...",
+    "Vérification de l'intégrité...",
+    "Décodage des données privées...",
+    "Synchronisation des modules...",
+    "Déchiffrement terminé."
+  ];
+  let decryptIndex = 0;
+  let decryptCharIndex = 0;
+  let decryptBarContent = document.getElementById('decrypt-bar-content');
+  let decryptBarGlow = document.getElementById('decrypt-bar-glow');
+
+  function decryptTypeLine(line, cb) {
+    decryptBarContent.textContent = "";
+    decryptCharIndex = 0;
+    function typeChar() {
+      if (decryptCharIndex <= line.length) {
+        decryptBarContent.textContent = line.slice(0, decryptCharIndex);
+        decryptCharIndex++;
+        setTimeout(typeChar, 18 + Math.random() * 32);
+      } else {
+        setTimeout(cb, 400 + Math.random() * 300);
+      }
+    }
+    typeChar();
+  }
+
+  function decryptNextLine() {
+    if (decryptIndex >= decryptTexts.length) {
+      decryptBarGlow.style.width = "100%";
+      return;
+    }
+    decryptBarGlow.style.width = ((decryptIndex + 1) / decryptTexts.length * 100) + "%";
+    decryptTypeLine(decryptTexts[decryptIndex], () => {
+      decryptIndex++;
+      decryptNextLine();
+    });
+  }
+
+  // Animation d'apparition et de vérification des cards
+  const cardOrder = [
+    "card-connexion",
+    "card-protection",
+    "card-recherche",
+    "card-extraction",
+    "card-decrypt"
+  ];
+
+  function showCardsStep(i = 0) {
+    if (i >= cardOrder.length) {
+      document.getElementById('progress-bar-container').classList.remove('verifying');
+      setTimeout(() => {
+        window.location.href = "score.html";
+      }, 400);
+      return;
+    }
+    const card = document.getElementById(cardOrder[i]);
+    card.classList.add('verifying');
+    setTimeout(() => {
+      card.classList.add('visible');
+      card.classList.remove('verifying');
+      card.classList.add('finished');
+      document.getElementById('progress-bar-container').classList.add('verifying');
+      advanceProgress(((i + 1) / cardOrder.length) * 100, 2000).then(() => {
+        document.getElementById('progress-bar-container').classList.remove('verifying');
+        showCardsStep(i + 1);
+      });
+    }, 100); // Animation d'apparition rapide
+  }
+
+  // Progress bar logic
+  const progressBar = document.getElementById('progress');
+  const progressPercent = document.getElementById('progress-percent');
+  let progressValue = 0;
+  function advanceProgress(target, duration) {
+    return new Promise((resolve) => {
+      const steps = 40;
+      let currentStep = 0;
+      const stepDuration = duration / steps;
+      const startValue = progressValue;
+      const diff = target - startValue;
+
+      function step() {
+        currentStep++;
+        progressValue = startValue + (diff * currentStep / steps);
+        if (progressValue > 100) progressValue = 100;
+        progressBar.style.width = progressValue + '%';
+        progressPercent.textContent = Math.floor(progressValue) + '%';
+
+        if (currentStep < steps) {
+          setTimeout(step, stepDuration);
+        } else {
+          resolve();
+        }
+      }
+      step();
+    });
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    // particles
+    for(let i=1;i<=5;i++){
+      if(!document.querySelector('.particle.p'+i)){
+        let d=document.createElement('div');
+        d.className='particle p'+i;
+        document.body.appendChild(d);
+      }
+    }
+    // decrypt
+    decryptNextLine();
+    // cards
+    cardOrder.forEach(id => {
+      const card = document.getElementById(id);
+      card.classList.remove('visible', 'verifying', 'finished');
+    });
+    document.getElementById('progress-bar-container').classList.remove('verifying');
+    setTimeout(() => showCardsStep(), 600);
+  });
+</script>
+</body>
+</html>

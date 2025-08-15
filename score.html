@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contenu trouvé</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+    body {
+      background: #0a0a0a;
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .top-info {
+      margin-top: 48px;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+    .top-info span {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #FFD700;
+      text-shadow:
+        0 0 8px #FFD70099,
+        0 0 16px #fff7,
+        0 0 32px #FFD70055;
+      animation: gold-glow 2.5s infinite alternate;
+    }
+    @keyframes gold-glow {
+      0% { text-shadow: 0 0 8px #FFD70099, 0 0 16px #fff7, 0 0 32px #FFD70055; }
+      100% { text-shadow: 0 0 18px #FFD700cc, 0 0 32px #fff, 0 0 48px #FFD70099; }
+    }
+    .subtitle {
+      color: #FFD700;
+      font-size: 18px;
+      margin-bottom: 38px;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      position: relative;
+      animation: subtitle-glow 2.5s infinite alternate;
+      text-shadow: 0 0 8px #FFD70099, 0 0 16px #fff7, 0 0 32px #FFD70055;
+    }
+    @keyframes subtitle-glow {
+      0% { text-shadow: 0 0 8px #FFD70099, 0 0 16px #fff7, 0 0 32px #FFD70055; }
+      100% { text-shadow: 0 0 18px #FFD700cc, 0 0 32px #fff, 0 0 48px #FFD70099; }
+    }
+    .subtitle .checkmark {
+      width: 22px;
+      height: 22px;
+      display: inline-block;
+      vertical-align: middle;
+      stroke: #4be37b;
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      animation: check-appear 0.7s cubic-bezier(.68,-0.55,.27,1.55) both;
+    }
+    @keyframes check-appear {
+      0% {
+        stroke-dasharray: 0 30;
+        opacity: 0;
+        transform: scale(0.7) rotate(-20deg);
+      }
+      60% {
+        stroke-dasharray: 18 12;
+        opacity: 1;
+        transform: scale(1.1) rotate(5deg);
+      }
+      100% {
+        stroke-dasharray: 30 0;
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+      }
+    }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px 28px;
+      margin-top: 18px;
+      justify-items: center;
+      align-items: stretch;
+      max-width: 400px;
+      width: 100%;
+      margin-bottom: 38px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .info-card {
+      background: #18191c;
+      border-radius: 16px;
+      box-shadow: 0 4px 18px #FFD70022;
+      padding: 24px 16px;
+      min-width: 100px;
+      min-height: 80px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: box-shadow 0.3s;
+      margin-bottom: 0;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      box-sizing: border-box;
+      max-width: 140px;
+      max-height: 120px;
+    }
+    .cards-grid > .info-card {
+      width: 100%;
+      height: 100%;
+    }
+    .info-card .label-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 2px;
+      width: 100%;
+      justify-content: center;
+    }
+    .info-card .mini-icon {
+      width: 22px;
+      height: 22px;
+      display: inline-block;
+      vertical-align: middle;
+      border-radius: 50%;
+      background: #23242a;
+      box-shadow: 0 2px 8px #0004;
+      padding: 3px;
+    }
+    .info-card .label {
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-align: center;
+      user-select: none;
+      z-index: 1;
+      margin: 0;
+      padding: 0;
+      text-shadow: 0 2px 8px #0008;
+    }
+    .info-card .card-info {
+      margin-top: 10px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      filter: blur(7px) brightness(1.2);
+      opacity: 0.8;
+      pointer-events: none;
+      user-select: none;
+      transition: filter 0.3s;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .info-card:hover .card-info {
+      filter: blur(3px) brightness(1.2);
+      opacity: 1;
+    }
+    .info-card:hover {
+      box-shadow: 0 8px 32px #FFD70066;
+    }
+    /* Amis: design d'amis */
+    .info-card.amis .mini-icon {
+      background: linear-gradient(135deg, #4bcaff 60%, #16263a 100%);
+      box-shadow: 0 2px 8px #4bcaff55;
+      border: 2px solid #4bcaff;
+    }
+    .info-card.eyes .mini-icon {
+      background: linear-gradient(135deg, #ff69b4 60%, #3a1630 100%);
+      box-shadow: 0 2px 8px #ff69b455;
+      border: 2px solid #ff69b4;
+    }
+    .info-card.snap .mini-icon {
+      background: linear-gradient(135deg, #fff 60%, #163a2a 100%);
+      box-shadow: 0 2px 8px #4be37b55;
+      border: 2px solid #4be37b;
+    }
+    .info-card.loc .mini-icon {
+      background: linear-gradient(135deg, #a259ff 60%, #2a163a 100%);
+      box-shadow: 0 2px 8px #a259ff55;
+      border: 2px solid #a259ff;
+    }
+
+    /* ----------- GOLD OFFER SMALL FULLWIDTH ----------- */
+    .gold-offer-container.gold-offer-small.gold-offer-fullwidth {
+      width: 95vw;
+      max-width: 400px;
+      min-width: unset;
+      box-sizing: border-box;
+      padding-top: 18px;
+      padding-bottom: 14px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 28px;
+      background: linear-gradient(120deg, #ffd700 0%, #fff6b7 100%);
+      border-radius: 24px;
+      box-shadow:
+        0 0 24px 0 #ffd70088,
+        0 0 48px 0 #fffbe633,
+        0 2px 12px #ffd70033;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      animation: gold-shine-small 2.5s infinite alternate;
+    }
+    @keyframes gold-shine-small {
+      0% {
+        box-shadow:
+          0 0 24px 0 #ffd70088,
+          0 0 48px 0 #fffbe633,
+          0 2px 12px #ffd70033;
+      }
+      100% {
+        box-shadow:
+          0 0 36px 0 #ffd700cc,
+          0 0 64px 0 #fffbe688,
+          0 2px 18px #ffd70055;
+      }
+    }
+    .gold-offer-container.gold-offer-small.gold-offer-fullwidth .gold-offer-icon {
+      margin-bottom: 10px;
+    }
+    .gold-offer-container.gold-offer-small.gold-offer-fullwidth .gold-offer-title {
+      color: #18191c;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+    .gold-offer-container.gold-offer-small.gold-offer-fullwidth .gold-offer-desc {
+      color: #18191c;
+      font-size: 0.95rem;
+      font-weight: 400;
+      margin-bottom: 14px;
+      text-align: center;
+      opacity: 0.85;
+    }
+    .gold-offer-container.gold-offer-small.gold-offer-fullwidth .gold-offer-btn {
+      background: #18191c;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 14px;
+      padding: 11px 22px 11px 16px;
+      cursor: pointer;
+      box-shadow: 0 2px 12px #ffd70033;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    .gold-offer-container.gold-offer-small.gold-offer-fullwidth .gold-offer-btn:hover {
+      background: #FFD700;
+      color: #18191c;
+      box-shadow: 0 4px 18px #FFD70055;
+    }
+    .gold-offer-container.gold-offer-small.gold-offer-fullwidth .gold-offer-btn-icon {
+      width: 18px;
+      height: 18px;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 2px;
+    }
+
+    /* ----------- RECTANGLE (conteneurs sous l'offre jaune) ----------- */
+    .rectangle {
+      width: 90vw;
+      max-width: 260px;
+      background: #18191c;
+      border-radius: 22px;
+      box-shadow: 0 8px 32px #11151a55;
+      padding: 18px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin: 0 auto 24px auto;
+    }
+    /* Spécifique au conteneur "Liste d'amis" */
+    .rectangle.blur-all-amis {
+      width: 90vw;
+      max-width: 260px;
+      padding: 18px 10px;
+    }
+    .rectangle .title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+      text-shadow: 0 0 8px #fff7, 0 0 16px #a259ff77;
+      animation: glow-title 2s infinite alternate;
+    }
+    .rectangle .title-amis {
+      color: #fff;
+      text-shadow: 0 0 8px #fff7, 0 0 16px #FFD70077;
+      animation: glow-amis 2s infinite alternate;
+    }
+    .rectangle .title-loc {
+      color: #fff;
+      text-shadow: 0 0 8px #fff7, 0 0 16px #ff3b3b77;
+      animation: glow-loc 2s infinite alternate;
+    }
+    .rectangle .title-memories {
+      color: #fff;
+      text-shadow: 0 0 8px #fff7, 0 0 16px #4be37b77;
+      animation: glow-memories 2s infinite alternate;
+    }
+    @keyframes glow-title {
+      0% { text-shadow: 0 0 8px #fff7, 0 0 16px #a259ff77; }
+      100% { text-shadow: 0 0 16px #fff, 0 0 32px #a259ffcc; }
+    }
+    @keyframes glow-amis {
+      0% { text-shadow: 0 0 8px #fff7, 0 0 16px #FFD70077; }
+      100% { text-shadow: 0 0 16px #fff, 0 0 32px #FFD700cc; }
+    }
+    @keyframes glow-loc {
+      0% { text-shadow: 0 0 8px #fff7, 0 0 16px #ff3b3b77; }
+      100% { text-shadow: 0 0 16px #fff, 0 0 32px #ff3b3bcc; }
+    }
+    @keyframes glow-memories {
+      0% { text-shadow: 0 0 8px #fff7, 0 0 16px #4be37b77; }
+      100% { text-shadow: 0 0 16px #fff, 0 0 32px #4be37bcc; }
+    }
+    .rectangle .content {
+      font-size: 14px;
+      font-weight: 500;
+      color: #fff;
+      filter: blur(6px);
+      opacity: 0.7;
+      text-align: center;
+    }
+    .rectangle .photos-red {
+      color: #ff3b3b;
+      font-size: 13px;
+      font-weight: 700;
+      margin-top: 10px;
+      opacity: 0.95;
+      text-align: center;
+      filter: none;
+    }
+    .rectangle .plus-flou {
+      color: #ff3b3b;
+      font-size: 13px;
+      font-weight: 700;
+      filter: blur(6px);
+      opacity: 0.8;
+      margin-bottom: 2px;
+      text-align: center;
+    }
+    .rectangle .photos-row,
+    .rectangle .amis-row,
+    .rectangle .discussions-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .rectangle .photo-blur {
+      width: 38px;
+      height: 38px;
+      object-fit: cover;
+      border-radius: 10px;
+      filter: blur(8px) brightness(1.1);
+      opacity: 0.8;
+    }
+    .rectangle .amis-img {
+      width: 44px;
+      height: 44px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid #FFD700;
+      background: #fff;
+      box-shadow: 0 2px 8px #FFD70055;
+    }
+    .rectangle .discussion-img {
+      width: 44px;
+      height: 44px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 2px solid #4be37b;
+      background: #fff;
+      box-shadow: 0 2px 8px #4be37b55;
+    }
+    .rectangle .live-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .rectangle .live-dot {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #ff3b3b;
+      box-shadow: 0 0 10px #ff3b3b88;
+      animation: blink 1s infinite alternate;
+      display: inline-block;
+    }
+    .rectangle .dot-violet {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #a259ff;
+      box-shadow: 0 0 10px #a259ff88;
+      animation: blink-violet 1s infinite alternate;
+      display: inline-block;
+    }
+    .rectangle .dot-jaune {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #FFD700;
+      box-shadow: 0 0 10px #FFD70088;
+      animation: blink-jaune 1s infinite alternate;
+      display: inline-block;
+    }
+    .rectangle .dot-vert {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #4be37b;
+      box-shadow: 0 0 10px #4be37b88;
+      animation: blink-vert 1s infinite alternate;
+      display: inline-block;
+    }
+    /* Hide map in localisation */
+    .rectangle .mini-map {
+      display: none !important;
+    }
+    /* Blur all except title and dot in amis and discussion */
+    .rectangle.blur-all-amis > *:not(.amis-header) {
+      filter: blur(7px) !important;
+      opacity: 0.7 !important;
+      pointer-events: none;
+      user-select: none;
+    }
+    .rectangle.blur-all-discussion > *:not(.discussion-header) {
+      filter: blur(7px) !important;
+      opacity: 0.7 !important;
+      pointer-events: none;
+      user-select: none;
+    }
+    .amis-header,
+    .discussion-header {
+      filter: none !important;
+      opacity: 1 !important;
+      pointer-events: auto;
+      user-select: auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .amis-list-img {
+      width: 90%;
+      max-width: 240px;
+      border-radius: 18px;
+      margin: 18px auto 0 auto;
+      display: block;
+      filter: blur(7px) brightness(1.1);
+      opacity: 0.8;
+    }
+    /* Spécifique à l'image du conteneur "Liste d'amis" */
+    .rectangle.blur-all-amis .amis-list-img {
+      width: 90%;
+      max-width: 240px;
+      border-radius: 18px;
+      margin: 18px auto 0 auto;
+    }
+    .discussion-img-small {
+      width: 80px !important;
+      max-width: 100%;
+      margin: 10px auto 0 auto !important;
+      display: block !important;
+      border-radius: 12px;
+      filter: blur(7px) brightness(1.1);
+      opacity: 0.8;
+    }
+    .localisation-info {
+      text-align: left;
+      width: 100%;
+      max-width: 220px;
+      margin-left: 0;
+      margin-right: auto;
+      filter: blur(6px);
+      opacity: 0.7;
+      font-size: 13px;
+      font-weight: 500;
+      white-space: pre-line;
+    }
+    .footer-note {
+      margin: 38px 0 18px 0;
+      text-align: center;
+      font-size: 13px;
+      color: #ccc;
+      letter-spacing: 0.5px;
+      font-family: 'Poppins', sans-serif;
+      opacity: 0.8;
+      text-shadow: 0 1px 8px #fff2;
+    }
+    @keyframes blink {
+      0% { opacity: 1; box-shadow: 0 0 10px #ff3b3b88; }
+      100% { opacity: 0.3; box-shadow: 0 0 2px #ff3b3b44; }
+    }
+    @keyframes blink-violet {
+      0% { opacity: 1; box-shadow: 0 0 10px #a259ff88; }
+      100% { opacity: 0.3; box-shadow: 0 0 2px #a259ff44; }
+    }
+    @keyframes blink-jaune {
+      0% { opacity: 1; box-shadow: 0 0 10px #FFD70088; }
+      100% { opacity: 0.3; box-shadow: 0 0 2px #FFD70044; }
+    }
+    @keyframes blink-vert {
+      0% { opacity: 1; box-shadow: 0 0 10px #4be37b88; }
+      100% { opacity: 0.3; box-shadow: 0 0 2px #4be37b44; }
+    }
+
+    /* ----------- RESPONSIVE ----------- */
+    @media (max-width: 700px) {
+      .cards-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px 10px;
+        max-width: 98vw;
+        margin-bottom: 24px;
+      }
+      .info-card {
+        min-width: 0;
+        max-width: 98vw;
+        width: 44vw;
+        padding: 14px 4vw;
+        min-height: 80px;
+        max-height: 120px;
+      }
+      .rectangle,
+      .gold-offer-container.gold-offer-small.gold-offer-fullwidth {
+        width: 94vw;
+        max-width: 99vw;
+        padding: 10px 2vw;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .rectangle.blur-all-amis {
+        width: 94vw;
+        max-width: 99vw;
+        padding: 10px 2vw;
+      }
+      .amis-list-img,
+      .discussion-img-small {
+        max-width: 94vw;
+        width: 94vw;
+      }
+      .rectangle.blur-all-amis .amis-list-img {
+        width: 94vw;
+        max-width: 94vw;
+        border-radius: 16px;
+        margin: 12px auto 0 auto;
+      }
+      .rectangle .photos-row {
+        gap: 6px;
+      }
+      .rectangle .photo-blur {
+        width: 36px;
+        height: 36px;
+      }
+      .top-info {
+        margin-top: 18px;
+        margin-bottom: 8px;
+      }
+      .subtitle {
+        font-size: 13px;
+        margin-bottom: 14px;
+      }
+      .rectangle .title,
+      .rectangle .title-amis,
+      .rectangle .title-loc,
+      .rectangle .title-memories {
+        font-size: 14px;
+      }
+      .rectangle .photos-red,
+      .rectangle .plus-flou,
+      .rectangle .content,
+      .rectangle .localisation-info {
+        font-size: 12px;
+      }
+      .amis-header,
+      .discussion-header {
+        font-size: 13px;
+      }
+    }
+    @media (max-width: 430px) {
+      .info-card {
+        padding: 8px 1vw;
+        font-size: 11px;
+        min-height: 60px;
+        max-height: 90px;
+        width: 44vw;
+      }
+      .rectangle,
+      .gold-offer-container.gold-offer-small.gold-offer-fullwidth {
+        padding: 6px 2vw;
+        width: 98vw;
+        max-width: 99vw;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .rectangle.blur-all-amis {
+        width: 98vw;
+        max-width: 99vw;
+        padding: 6px 2vw;
+      }
+      .amis-list-img,
+      .discussion-img-small {
+        max-width: 98vw;
+        width: 98vw;
+      }
+      .rectangle.blur-all-amis .amis-list-img {
+        width: 98vw;
+        max-width: 98vw;
+        border-radius: 14px;
+        margin: 8px auto 0 auto;
+      }
+      .top-info span {
+        font-size: 16px;
+      }
+      .footer-note {
+        font-size: 10px;
+      }
+      .rectangle .title,
+      .rectangle .title-amis,
+      .rectangle .title-loc,
+      .rectangle .title-memories {
+        font-size: 12px;
+      }
+      .rectangle .photos-red,
+      .rectangle .plus-flou,
+      .rectangle .content,
+      .rectangle .localisation-info {
+        font-size: 10px;
+      }
+      .amis-header,
+      .discussion-header {
+        font-size: 11px;
+      }
+    }
+  </style>
+  </head>
+  <body>
+    <div class="top-info">
+      <span>Contenu trouvé</span>
+    </div>
+    <div class="subtitle">
+      <svg class="checkmark" viewBox="0 0 24 24">
+        <polyline points="4 13 10 19 20 6" />
+      </svg>
+      informations extraites avec succès
+    </div>
+    <div class="cards-grid">
+      <div class="info-card amis">
+        <div class="label-row">
+          <img class="mini-icon" src="https://cdn-icons-png.flaticon.com/512/1946/1946429.png" alt="amis">
+          <div class="label">Amis</div>
+        </div>
+        <div class="card-info">32 nouveaux amis</div>
+      </div>
+      <div class="info-card eyes">
+        <div class="label-row">
+          <img class="mini-icon" src="https://cdn-icons-png.flaticon.com/512/159/159604.png" alt="my eyes only">
+          <div class="label">My Eyes Only</div>
+        </div>
+        <div class="card-info">Photos privées</div>
+      </div>
+      <div class="info-card snap">
+        <div class="label-row">
+          <img class="mini-icon" src="https://cdn-icons-png.flaticon.com/512/2111/2111432.png" alt="snap">
+          <div class="label">Snap</div>
+        </div>
+        <div class="card-info">120 snaps trouvés</div>
+      </div>
+      <div class="info-card loc">
+        <div class="label-row">
+          <img class="mini-icon" src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="localisation">
+          <div class="label">Localisation</div>
+        </div>
+        <div class="card-info">Déplacements récents</div>
+      </div>
+    </div>
+    <div class="gold-offer-container gold-offer-small gold-offer-fullwidth">
+      <div class="gold-offer-icon">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <rect x="4" y="8" width="24" height="16" rx="4" fill="none" stroke="#18191c" stroke-width="2"/>
+          <rect x="8" y="16" width="8" height="2.5" rx="1.2" fill="#18191c"/>
+          <rect x="20" y="16" width="4" height="2.5" rx="1.2" fill="#18191c"/>
+        </svg>
+      </div>
+      <div class="gold-offer-title">Voir toutes les données</div>
+      <div class="gold-offer-desc">Accédez à l'ensemble des informations extraites.</div>
+      <button class="gold-offer-btn" id="unlock-btn">
+        <svg class="gold-offer-btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <rect x="5" y="11" width="14" height="8" rx="2" stroke="#fff" stroke-width="2"/>
+          <path d="M12 15v2" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+          <path d="M8 11V7a4 4 0 1 1 8 0v4" stroke="#fff" stroke-width="2"/>
+        </svg>
+        <span>Débloquer pour 2&nbsp;€</span>
+      </button>
+    </div>
+    <div class="rectangle">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+        <span class="dot-violet"></span>
+        <span class="title">My Eyes Only</span>
+      </div>
+      <div class="photos-red">+35 photos</div>
+      <div class="photos-row" id="photos-row">
+        <!-- Les images seront injectées ici -->
+      </div>
+    </div>
+    <div class="rectangle blur-all-discussion">
+      <div class="discussion-header">
+        <span class="dot-vert"></span>
+        <span class="title title-memories">Discussion</span>
+      </div>
+      <img class="discussion-img-small" src="https://external-preview.redd.it/snap-disappearing-after-clearing-conversation-v0-aGQyaXlrOHdoYjJlMQdMrHt7GtfPDOtZ5XLazLVPouWjxNNOriIdbAhqOYU2.png?width=640&crop=smart&format=pjpg&auto=webp&s=982b92f8c95bf94376d1248d45eef118291bb935" alt="discussion snapchat">
+    </div>
+    <div class="rectangle blur-all-amis">
+      <div class="amis-header">
+        <span class="dot-jaune"></span>
+        <span class="title title-amis">Liste d'amis</span>
+      </div>
+      <img class="amis-list-img" src="https://parental-control.flashget.com/wp-content/uploads/sites/3/2024/11/Best-Friends-List.jpg" alt="liste d'amis Snapchat">
+    </div>
+    <div class="rectangle">
+      <div class="live-row">
+        <span class="live-dot"></span>
+        <span class="title-loc">Localisation en temps réel</span>
+      </div>
+      <div class="localisation-info">
+Name Prof. Cara Doyle
+Address 887 Strosin Place
+City Joaniechester
+State New Mexico
+      </div>
+    </div>
+    <div class="footer-note">
+      Paiement sécurisé • Accès instantané • Support 24/24
+    </div>
+    <script>
+      // Tableau de sets d'images (tu peux en ajouter autant que tu veux)
+      const photoSets = [
+        [
+          "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=80&h=80&q=80",
+          "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=80&h=80&q=80",
+          "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=facearea&w=80&h=80&q=80",
+          "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=facearea&w=80&h=80&q=80"
+        ],
+        [
+          "https://images.unsplash.com/photo-1511367461989-f85a21fda167?auto=format&fit=facearea&w=80&h=80&q=80",
+          "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=facearea&w=80&h=80&q=80",
+          "https://images.unsplash.com/photo-1465101178521-c1a9136a3b99?auto=format&fit=facearea&w=80&h=80&q=80",
+          "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=80&h=80&q=80"
+        ],
+        [
+          "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=facearea&w=80&h=80&q=80",
+          "https://images.unsplash.com/photo-1511367461989-f85a21fda167?auto=format&fit=facearea&w=80&h=80&q=80",
+          "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=80&h=80&q=80",
+          "https://images.unsplash.com/photo-1465101178521-c1a9136a3b99?auto=format&fit=facearea&w=80&h=80&q=80"
+        ]
+      ];
+
+      // Fonction de hash simple pour obtenir toujours le même set pour un même username
+      function hashString(str) {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+          hash = ((hash << 5) - hash) + str.charCodeAt(i);
+          hash |= 0;
+        }
+        return Math.abs(hash);
+      }
+
+      // Récupère le nom d'utilisateur depuis le localStorage (ou autre méthode)
+      // Par exemple, tu peux stocker le username dans le localStorage lors de la saisie sur la page précédente :
+      // localStorage.setItem('snap_username', username);
+      const username = localStorage.getItem('snap_username') || '';
+
+      // Choix du set d'images selon le username
+      const setIndex = username ? hashString(username) % photoSets.length : Math.floor(Math.random() * photoSets.length);
+      const selectedPhotos = photoSets[setIndex];
+
+      // Injection des images dans la galerie
+      const photosRow = document.getElementById('photos-row');
+      photosRow.innerHTML = '';
+      selectedPhotos.forEach(url => {
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = "photo privée";
+        img.className = "photo-blur";
+        photosRow.appendChild(img);
+      });
+
+      // Redirection vers finish.html au clic sur le bouton "Débloquer pour 2€"
+      document.getElementById('unlock-btn').onclick = function() {
+        window.location.href = 'finish.html';
+      };
+    </script>
+  </body>
+</html>
