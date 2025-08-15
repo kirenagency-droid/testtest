@@ -17,10 +17,21 @@
       flex-direction: column;
       align-items: center;
     }
+    .main-wrapper {
+      width: 100%;
+      max-width: 430px;
+      padding: 0 14px;
+      box-sizing: border-box;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
     .top-info {
       margin-top: 48px;
       margin-bottom: 18px;
       text-align: center;
+      width: 100%;
     }
     .top-info span {
       font-size: 32px;
@@ -50,6 +61,7 @@
       position: relative;
       animation: subtitle-glow 2.5s infinite alternate;
       text-shadow: 0 0 8px #FFD70099, 0 0 16px #fff7, 0 0 32px #FFD70055;
+      width: 100%;
     }
     @keyframes subtitle-glow {
       0% { text-shadow: 0 0 8px #FFD70099, 0 0 16px #fff7, 0 0 32px #FFD70055; }
@@ -161,7 +173,7 @@
       opacity: 0.8;
       pointer-events: none;
       user-select: none;
-      transition: filter 0.3s;
+      transition: filter 0.3s, opacity 0.3s;
       width: 100%;
       display: flex;
       justify-content: center;
@@ -198,7 +210,7 @@
 
     /* ----------- GOLD OFFER SMALL FULLWIDTH ----------- */
     .gold-offer-container.gold-offer-small.gold-offer-fullwidth {
-      width: 95vw;
+      width: 100%;
       max-width: 400px;
       min-width: unset;
       box-sizing: border-box;
@@ -283,8 +295,8 @@
 
     /* ----------- RECTANGLE (conteneurs sous l'offre jaune) ----------- */
     .rectangle {
-      width: 90vw;
-      max-width: 260px;
+      width: 100%;
+      max-width: 320px;
       background: #18191c;
       border-radius: 22px;
       box-shadow: 0 8px 32px #11151a55;
@@ -295,12 +307,14 @@
       justify-content: center;
       position: relative;
       margin: 0 auto 24px auto;
+      box-sizing: border-box;
     }
-    /* Spécifique au conteneur "Liste d'amis" */
-    .rectangle.blur-all-amis {
-      width: 90vw;
-      max-width: 260px;
+    .rectangle.blur-all-amis,
+    .rectangle.blur-all-discussion {
+      width: 100%;
+      max-width: 320px;
       padding: 18px 10px;
+      box-sizing: border-box;
     }
     .rectangle .title {
       font-size: 16px;
@@ -383,6 +397,8 @@
       border-radius: 10px;
       filter: blur(8px) brightness(1.1);
       opacity: 0.8;
+      pointer-events: none;
+      user-select: none;
     }
     .rectangle .amis-img {
       width: 44px;
@@ -448,14 +464,14 @@
     .rectangle .mini-map {
       display: none !important;
     }
-    /* Blur all except title and dot in amis and discussion */
-    .rectangle.blur-all-amis > *:not(.amis-header) {
+    /* Blur all except header in amis and discussion */
+    .rectangle.blur-all-amis > *:not(.amis-header):not(.amis-list-img) {
       filter: blur(7px) !important;
       opacity: 0.7 !important;
       pointer-events: none;
       user-select: none;
     }
-    .rectangle.blur-all-discussion > *:not(.discussion-header) {
+    .rectangle.blur-all-discussion > *:not(.discussion-header):not(.discussion-img-small) {
       filter: blur(7px) !important;
       opacity: 0.7 !important;
       pointer-events: none;
@@ -480,13 +496,18 @@
       display: block;
       filter: blur(7px) brightness(1.1);
       opacity: 0.8;
+      pointer-events: none;
+      user-select: none;
     }
-    /* Spécifique à l'image du conteneur "Liste d'amis" */
     .rectangle.blur-all-amis .amis-list-img {
       width: 90%;
       max-width: 240px;
       border-radius: 18px;
       margin: 18px auto 0 auto;
+      filter: blur(7px) brightness(1.1);
+      opacity: 0.8;
+      pointer-events: none;
+      user-select: none;
     }
     .discussion-img-small {
       width: 80px !important;
@@ -496,6 +517,14 @@
       border-radius: 12px;
       filter: blur(7px) brightness(1.1);
       opacity: 0.8;
+      pointer-events: none;
+      user-select: none;
+    }
+    .rectangle.blur-all-discussion .discussion-img-small {
+      filter: blur(7px) brightness(1.1);
+      opacity: 0.8;
+      pointer-events: none;
+      user-select: none;
     }
     .localisation-info {
       text-align: left;
@@ -518,6 +547,7 @@
       font-family: 'Poppins', sans-serif;
       opacity: 0.8;
       text-shadow: 0 1px 8px #fff2;
+      width: 100%;
     }
     @keyframes blink {
       0% { opacity: 1; box-shadow: 0 0 10px #ff3b3b88; }
@@ -538,6 +568,11 @@
 
     /* ----------- RESPONSIVE ----------- */
     @media (max-width: 700px) {
+      .main-wrapper {
+        max-width: 98vw;
+        padding-left: 2vw;
+        padding-right: 2vw;
+      }
       .cards-grid {
         grid-template-columns: 1fr 1fr;
         gap: 10px 10px;
@@ -554,14 +589,15 @@
       }
       .rectangle,
       .gold-offer-container.gold-offer-small.gold-offer-fullwidth {
-        width: 94vw;
+        width: 100%;
         max-width: 99vw;
         padding: 10px 2vw;
         margin-left: auto;
         margin-right: auto;
       }
-      .rectangle.blur-all-amis {
-        width: 94vw;
+      .rectangle.blur-all-amis,
+      .rectangle.blur-all-discussion {
+        width: 100%;
         max-width: 99vw;
         padding: 10px 2vw;
       }
@@ -609,6 +645,11 @@
       }
     }
     @media (max-width: 430px) {
+      .main-wrapper {
+        max-width: 99vw;
+        padding-left: 2vw;
+        padding-right: 2vw;
+      }
       .info-card {
         padding: 8px 1vw;
         font-size: 11px;
@@ -619,13 +660,14 @@
       .rectangle,
       .gold-offer-container.gold-offer-small.gold-offer-fullwidth {
         padding: 6px 2vw;
-        width: 98vw;
+        width: 100%;
         max-width: 99vw;
         margin-left: auto;
         margin-right: auto;
       }
-      .rectangle.blur-all-amis {
-        width: 98vw;
+      .rectangle.blur-all-amis,
+      .rectangle.blur-all-discussion {
+        width: 100%;
         max-width: 99vw;
         padding: 6px 2vw;
       }
@@ -666,102 +708,104 @@
   </style>
   </head>
   <body>
-    <div class="top-info">
-      <span>Contenu trouvé</span>
-    </div>
-    <div class="subtitle">
-      <svg class="checkmark" viewBox="0 0 24 24">
-        <polyline points="4 13 10 19 20 6" />
-      </svg>
-      informations extraites avec succès
-    </div>
-    <div class="cards-grid">
-      <div class="info-card amis">
-        <div class="label-row">
-          <img class="mini-icon" src="https://cdn-icons-png.flaticon.com/512/1946/1946429.png" alt="amis">
-          <div class="label">Amis</div>
-        </div>
-        <div class="card-info">32 nouveaux amis</div>
+    <div class="main-wrapper">
+      <div class="top-info">
+        <span>Contenu trouvé</span>
       </div>
-      <div class="info-card eyes">
-        <div class="label-row">
-          <img class="mini-icon" src="https://cdn-icons-png.flaticon.com/512/159/159604.png" alt="my eyes only">
-          <div class="label">My Eyes Only</div>
-        </div>
-        <div class="card-info">Photos privées</div>
-      </div>
-      <div class="info-card snap">
-        <div class="label-row">
-          <img class="mini-icon" src="https://cdn-icons-png.flaticon.com/512/2111/2111432.png" alt="snap">
-          <div class="label">Snap</div>
-        </div>
-        <div class="card-info">120 snaps trouvés</div>
-      </div>
-      <div class="info-card loc">
-        <div class="label-row">
-          <img class="mini-icon" src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="localisation">
-          <div class="label">Localisation</div>
-        </div>
-        <div class="card-info">Déplacements récents</div>
-      </div>
-    </div>
-    <div class="gold-offer-container gold-offer-small gold-offer-fullwidth">
-      <div class="gold-offer-icon">
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-          <rect x="4" y="8" width="24" height="16" rx="4" fill="none" stroke="#18191c" stroke-width="2"/>
-          <rect x="8" y="16" width="8" height="2.5" rx="1.2" fill="#18191c"/>
-          <rect x="20" y="16" width="4" height="2.5" rx="1.2" fill="#18191c"/>
+      <div class="subtitle">
+        <svg class="checkmark" viewBox="0 0 24 24">
+          <polyline points="4 13 10 19 20 6" />
         </svg>
+        informations extraites avec succès
       </div>
-      <div class="gold-offer-title">Voir toutes les données</div>
-      <div class="gold-offer-desc">Accédez à l'ensemble des informations extraites.</div>
-      <button class="gold-offer-btn" id="unlock-btn">
-        <svg class="gold-offer-btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
-          <rect x="5" y="11" width="14" height="8" rx="2" stroke="#fff" stroke-width="2"/>
-          <path d="M12 15v2" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
-          <path d="M8 11V7a4 4 0 1 1 8 0v4" stroke="#fff" stroke-width="2"/>
-        </svg>
-        <span>Débloquer pour 2&nbsp;€</span>
-      </button>
-    </div>
-    <div class="rectangle">
-      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
-        <span class="dot-violet"></span>
-        <span class="title">My Eyes Only</span>
+      <div class="cards-grid">
+        <div class="info-card amis">
+          <div class="label-row">
+            <img class="mini-icon" src="https://cdn-icons-png.flaticon.com/512/1946/1946429.png" alt="amis">
+            <div class="label">Amis</div>
+          </div>
+          <div class="card-info">32 nouveaux amis</div>
+        </div>
+        <div class="info-card eyes">
+          <div class="label-row">
+            <img class="mini-icon" src="https://cdn-icons-png.flaticon.com/512/159/159604.png" alt="my eyes only">
+            <div class="label">My Eyes Only</div>
+          </div>
+          <div class="card-info">Photos privées</div>
+        </div>
+        <div class="info-card snap">
+          <div class="label-row">
+            <img class="mini-icon" src="https://cdn-icons-png.flaticon.com/512/2111/2111432.png" alt="snap">
+            <div class="label">Snap</div>
+          </div>
+          <div class="card-info">120 snaps trouvés</div>
+        </div>
+        <div class="info-card loc">
+          <div class="label-row">
+            <img class="mini-icon" src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="localisation">
+            <div class="label">Localisation</div>
+          </div>
+          <div class="card-info">Déplacements récents</div>
+        </div>
       </div>
-      <div class="photos-red">+35 photos</div>
-      <div class="photos-row" id="photos-row">
-        <!-- Les images seront injectées ici -->
+      <div class="gold-offer-container gold-offer-small gold-offer-fullwidth">
+        <div class="gold-offer-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <rect x="4" y="8" width="24" height="16" rx="4" fill="none" stroke="#18191c" stroke-width="2"/>
+            <rect x="8" y="16" width="8" height="2.5" rx="1.2" fill="#18191c"/>
+            <rect x="20" y="16" width="4" height="2.5" rx="1.2" fill="#18191c"/>
+          </svg>
+        </div>
+        <div class="gold-offer-title">Voir toutes les données</div>
+        <div class="gold-offer-desc">Accédez à l'ensemble des informations extraites.</div>
+        <button class="gold-offer-btn" id="unlock-btn">
+          <svg class="gold-offer-btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <rect x="5" y="11" width="14" height="8" rx="2" stroke="#fff" stroke-width="2"/>
+            <path d="M12 15v2" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+            <path d="M8 11V7a4 4 0 1 1 8 0v4" stroke="#fff" stroke-width="2"/>
+          </svg>
+          <span>Débloquer pour 2&nbsp;€</span>
+        </button>
       </div>
-    </div>
-    <div class="rectangle blur-all-discussion">
-      <div class="discussion-header">
-        <span class="dot-vert"></span>
-        <span class="title title-memories">Discussion</span>
+      <div class="rectangle">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+          <span class="dot-violet"></span>
+          <span class="title">My Eyes Only</span>
+        </div>
+        <div class="photos-red">+35 photos</div>
+        <div class="photos-row" id="photos-row">
+          <!-- Les images seront injectées ici -->
+        </div>
       </div>
-      <img class="discussion-img-small" src="https://external-preview.redd.it/snap-disappearing-after-clearing-conversation-v0-aGQyaXlrOHdoYjJlMQdMrHt7GtfPDOtZ5XLazLVPouWjxNNOriIdbAhqOYU2.png?width=640&crop=smart&format=pjpg&auto=webp&s=982b92f8c95bf94376d1248d45eef118291bb935" alt="discussion snapchat">
-    </div>
-    <div class="rectangle blur-all-amis">
-      <div class="amis-header">
-        <span class="dot-jaune"></span>
-        <span class="title title-amis">Liste d'amis</span>
+      <div class="rectangle blur-all-discussion">
+        <div class="discussion-header">
+          <span class="dot-vert"></span>
+          <span class="title title-memories">Discussion</span>
+        </div>
+        <img class="discussion-img-small" src="https://external-preview.redd.it/snap-disappearing-after-clearing-conversation-v0-aGQyaXlrOHdoYjJlMQdMrHt7GtfPDOtZ5XLazLVPouWjxNNOriIdbAhqOYU2.png?width=640&crop=smart&format=pjpg&auto=webp&s=982b92f8c95bf94376d1248d45eef118291bb935" alt="discussion snapchat">
       </div>
-      <img class="amis-list-img" src="https://parental-control.flashget.com/wp-content/uploads/sites/3/2024/11/Best-Friends-List.jpg" alt="liste d'amis Snapchat">
-    </div>
-    <div class="rectangle">
-      <div class="live-row">
-        <span class="live-dot"></span>
-        <span class="title-loc">Localisation en temps réel</span>
+      <div class="rectangle blur-all-amis">
+        <div class="amis-header">
+          <span class="dot-jaune"></span>
+          <span class="title title-amis">Liste d'amis</span>
+        </div>
+        <img class="amis-list-img" src="https://parental-control.flashget.com/wp-content/uploads/sites/3/2024/11/Best-Friends-List.jpg" alt="liste d'amis Snapchat">
       </div>
-      <div class="localisation-info">
+      <div class="rectangle">
+        <div class="live-row">
+          <span class="live-dot"></span>
+          <span class="title-loc">Localisation en temps réel</span>
+        </div>
+        <div class="localisation-info">
 Name Prof. Cara Doyle
 Address 887 Strosin Place
 City Joaniechester
 State New Mexico
+        </div>
       </div>
-    </div>
-    <div class="footer-note">
-      Paiement sécurisé • Accès instantané • Support 24/24
+      <div class="footer-note">
+        Paiement sécurisé • Accès instantané • Support 24/24
+      </div>
     </div>
     <script>
       // Tableau de sets d'images (tu peux en ajouter autant que tu veux)
@@ -797,8 +841,6 @@ State New Mexico
       }
 
       // Récupère le nom d'utilisateur depuis le localStorage (ou autre méthode)
-      // Par exemple, tu peux stocker le username dans le localStorage lors de la saisie sur la page précédente :
-      // localStorage.setItem('snap_username', username);
       const username = localStorage.getItem('snap_username') || '';
 
       // Choix du set d'images selon le username
